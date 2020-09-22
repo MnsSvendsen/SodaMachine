@@ -67,29 +67,22 @@ namespace ConsoleApplication1.Controllers
                 {
                     var csoda = input.Split(' ')[2];
                     //Find out witch kind
-                    switch (csoda)
+                    try
                     {
-                        case "coke":
-                            if (inventory[0].Nr > 0)
-                            {
-                                Console.WriteLine("Giving coke out");
-                                inventory[0].Nr--;
-                            }
-                            break;
-                        case "sprite":
-                            if (inventory[1].Nr > 0)
-                            {
-                                Console.WriteLine("Giving sprite out");
-                                inventory[1].Nr--;
-                            }
-                            break;
-                        case "fanta":
-                            if (inventory[2].Nr > 0)
-                            {
-                                Console.WriteLine("Giving fanta out");
-                                inventory[2].Nr--;
-                            }
-                            break;
+                        var sodatype = inventory.First(Soda => Soda.Name == csoda);
+                        if (sodatype.Nr > 0)
+                        {
+                            Console.WriteLine("Giving " + sodatype.Name + " out");
+                            sodatype.Nr--;
+                        }
+                        else if (sodatype.Nr == 0)
+                        {
+                            Console.WriteLine("No " + sodatype.Name + " left");
+                        }
+                    }
+                    catch
+                    {
+                        Console.WriteLine(" No such soda ");
                     }
 
                 }
