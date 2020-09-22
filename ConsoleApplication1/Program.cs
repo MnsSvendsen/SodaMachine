@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConsoleApplication1.Repo;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,7 @@ namespace ConsoleApplication1
 {
     internal class Program
     {
+       
         private static void Main(string[] args)
         {
             SodaMachine sodaMachine = new SodaMachine();
@@ -17,6 +19,7 @@ namespace ConsoleApplication1
 
     public class SodaMachine
     {
+        private readonly MockSodaApi _repo = new MockSodaApi();
         private static int money;
 
         /// <summary>
@@ -24,7 +27,7 @@ namespace ConsoleApplication1
         /// </summary>
         public void Start()
         {
-            var inventory = new[] { new Soda { Name = "coke", Nr = 5 }, new Soda { Name = "sprite", Nr = 3 }, new Soda { Name = "fanta", Nr = 3 } };
+            var inventory = _repo.GetSodas();
 
             while (true)
             {
