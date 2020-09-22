@@ -113,9 +113,9 @@ namespace ConsoleApplication1.Controllers
             }
         }
 
-        public int RecallMonney(int money)
+        public int RecallMonney(int moneyToReturn)
         {
-            Console.WriteLine("Returning " + money + " to customer");
+            Console.WriteLine("Returning " + moneyToReturn + " to customer");
             money = 0;
             return money;
         }
