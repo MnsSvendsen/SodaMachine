@@ -18,5 +18,16 @@ namespace ConsoleApplication1Tests
 
             Assert.AreEqual(exspectedMonney, result);
         }
+
+        [TestMethod]
+        public void TestRecallMonney()
+        {
+            var insertedMoney = 100;
+            var exspectedMonney = 0;
+
+            int result = sodaMachine.RecallMonney(insertedMoney);
+
+            Assert.AreEqual(exspectedMonney, result);
+        }
     }
 }

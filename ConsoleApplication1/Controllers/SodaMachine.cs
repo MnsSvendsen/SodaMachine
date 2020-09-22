@@ -47,7 +47,7 @@ namespace ConsoleApplication1.Controllers
                     }
                     if (input.Equals("recall"))
                     {
-                        RecallMonney();
+                        RecallMonney(money);
                     }
                 }
                 catch
@@ -113,10 +113,11 @@ namespace ConsoleApplication1.Controllers
             }
         }
 
-        public void RecallMonney()
+        public int RecallMonney(int money)
         {
             Console.WriteLine("Returning " + money + " to customer");
             money = 0;
+            return money;
         }
 
         public void DisplayText()
