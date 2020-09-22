@@ -7,7 +7,7 @@ using System.Text;
 
 namespace ConsoleApplication1.Controllers
 {
-    class SodaMachine
+   public class SodaMachine
     {
         private readonly MockSodaApi _repo = new MockSodaApi();
         private static int money;
