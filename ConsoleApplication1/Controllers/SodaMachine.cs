@@ -1,4 +1,5 @@
-﻿using ConsoleApplication1.Repo;
+﻿using ConsoleApplication1.Moddels;
+using ConsoleApplication1.Repo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,88 +17,109 @@ namespace ConsoleApplication1.Controllers
         /// </summary>
         public void Start()
         {
-            var inventory = _repo.GetSodas();
 
             while (true)
             {
+
                 DisplayText();
 
+                var inventory = _repo.GetSodas();
                 var input = Console.ReadLine();
-
-                if (input.StartsWith("insert"))
+                try
                 {
-                    //Add to credit
-                    money += int.Parse(input.Split(' ')[1]);
-                    Console.WriteLine("Adding " + int.Parse(input.Split(' ')[1]) + " to credit");
-                }
 
-                if (input.StartsWith("order"))
-                {
-                    // split string on space
-                    var csoda = input.Split(' ')[1];
-                    //Find out witch kind
-
-                    try
+                    if (input.StartsWith("insert"))
                     {
-                        var sodatype = inventory.First(Soda => Soda.Name == csoda);
-                        if (sodatype.Nr > 0 && sodatype.Price <= money)
-                        {
-                            Console.WriteLine("Giving " + sodatype.Name + " out");
-                            money -= sodatype.Price;
-                            Console.WriteLine("Giving " + money + " out in change");
-                            money = 0;
-                            sodatype.Nr--;
-                        }
-                        else if (sodatype.Nr == 0)
-                        {
-                            Console.WriteLine("No " + sodatype.Name + " left");
-                        }
-                        else if (sodatype.Price > money)
-                        {
-                            Console.WriteLine("Need " + (sodatype.Price - money) + " more");
-                        }
-                    }
-                    catch
-                    {
-                        Console.WriteLine(" No such soda ");
-                    }
-                }
-
-                if (input.StartsWith("sms order"))
-                {
-                    var csoda = input.Split(' ')[2];
-                    //Find out witch kind
-                    try
-                    {
-                        var sodatype = inventory.First(Soda => Soda.Name == csoda);
-                        if (sodatype.Nr > 0)
-                        {
-                            Console.WriteLine("Giving " + sodatype.Name + " out");
-                            sodatype.Nr--;
-                        }
-                        else if (sodatype.Nr == 0)
-                        {
-                            Console.WriteLine("No " + sodatype.Name + " left");
-                        }
-                    }
-                    catch
-                    {
-                        Console.WriteLine(" No such soda ");
+                        Console.WriteLine("Adding " + AddCredit(input) + " to credit");
                     }
 
-                }
 
-                if (input.Equals("recall"))
+                    if (input.StartsWith("order"))
+                    {
+                        var csoda = input.Split(' ')[1];
+                        OrderSoda(csoda, inventory);
+                    }
+
+                    if (input.StartsWith("sms order"))
+                    {
+                        var csoda = input.Split(' ')[2];
+                        OrderSodaSms(csoda, inventory);
+                    }
+                    if (input.Equals("recall"))
+                    {
+                        RecallMonney();
+                    }
+                }
+                catch
                 {
-                    //Give money back
-                    Console.WriteLine("Returning " + money + " to customer");
-                    money = 0;
+                    Console.WriteLine(" No such comand ");
                 }
-
             }
         }
 
-        private void DisplayText()
+        public int AddCredit(string amount)
+        {
+            money += int.Parse(amount.Split(' ')[1]);
+            return money;
+
+        }
+
+        public void OrderSoda(string name, Soda[] inventory)
+        {
+            try
+            {
+                var sodatype = inventory.First(Soda => Soda.Name == name);
+                if (sodatype.Nr > 0 && sodatype.Price <= money)
+                {
+                    Console.WriteLine("Giving " + sodatype.Name + " out");
+                    money -= sodatype.Price;
+                    Console.WriteLine("Giving " + money + " out in change");
+                    money = 0;
+                    sodatype.Nr--;
+                }
+                else if (sodatype.Nr == 0)
+                {
+                    Console.WriteLine("No " + sodatype.Name + " left");
+                }
+                else if (sodatype.Price > money)
+                {
+                    Console.WriteLine("Need " + (sodatype.Price - money) + " more");
+                }
+            }
+            catch
+            {
+                Console.WriteLine(" No such soda ");
+            }
+        }
+
+        public void OrderSodaSms(string name, Soda[] inventory)
+        {
+            try
+            {
+                var sodatype = inventory.First(Soda => Soda.Name == name);
+                if (sodatype.Nr > 0)
+                {
+                    Console.WriteLine("Giving " + sodatype.Name + " out");
+                    sodatype.Nr--;
+                }
+                else if (sodatype.Nr == 0)
+                {
+                    Console.WriteLine("No " + sodatype.Name + " left");
+                }
+            }
+            catch
+            {
+                Console.WriteLine(" No such soda ");
+            }
+        }
+
+        public void RecallMonney()
+        {
+            Console.WriteLine("Returning " + money + " to customer");
+            money = 0;
+        }
+
+        public void DisplayText()
         {
             Console.WriteLine("\n\nAvailable commands:");
             Console.WriteLine("insert (money) - Money put into money slot");
@@ -109,4 +131,6 @@ namespace ConsoleApplication1.Controllers
             Console.WriteLine("-------\n\n");
         }
     }
+
 }
+
