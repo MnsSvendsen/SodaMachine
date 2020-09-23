@@ -7,23 +7,22 @@ using System.Text;
 
 namespace ConsoleApplication1.Controllers
 {
-   public class SodaMachine
+    public class SodaMachineController
     {
         private readonly MockSodaApi _repo = new MockSodaApi();
         private static int money;
-        public SodaMachine() { }
+        public SodaMachineController() { }
         /// <summary>
         /// This is the starter method for the machine
         /// </summary>
         public void Start()
         {
-
+            var inventory = _repo.GetSodas();
             while (true)
             {
 
                 DisplayText();
 
-                var inventory = _repo.GetSodas();
                 var input = Console.ReadLine();
                 try
                 {
@@ -48,6 +47,15 @@ namespace ConsoleApplication1.Controllers
                     if (input.Equals("recall"))
                     {
                         RecallMonney(money);
+                    }
+                    if (input.Equals("inventory"))
+                    {
+                        PrintInventory(inventory);
+                    }
+                    if (input.StartsWith("restock"))
+                    {
+                        var csoda = input.Split(' ')[1];
+                        StockInventory(csoda, inventory);
                     }
                 }
                 catch
@@ -113,6 +121,28 @@ namespace ConsoleApplication1.Controllers
             }
         }
 
+        public void PrintInventory(Soda[] inventory)
+        {
+            foreach (Soda soda in inventory)
+            {
+                Console.WriteLine("Name:" + soda.Name + "  Stock:" + soda.Nr + "  Price:" + soda.Price);
+            }
+        }
+
+        public void StockInventory(string name, Soda[] inventory)
+        {
+            var sodatype = inventory.First(Soda => Soda.Name == name);
+            if (sodatype.Nr < 6)
+            {
+                Console.WriteLine("Filling " + sodatype.Name + " inn to the machine");
+                sodatype.Nr = 6;
+            }
+            else if (sodatype.Nr >= 6)
+            {
+                Console.WriteLine("No rom left to stock soda");
+            }
+        }
+
         public int RecallMonney(int moneyToReturn)
         {
             Console.WriteLine("Returning " + moneyToReturn + " to customer");
@@ -127,6 +157,8 @@ namespace ConsoleApplication1.Controllers
             Console.WriteLine("order (coke, sprite, fanta) - Order from machines buttons");
             Console.WriteLine("sms order (coke, sprite, fanta) - Order sent by sms");
             Console.WriteLine("recall - gives money back");
+            Console.WriteLine("inventory - Gets inventory in the machin");
+            Console.WriteLine("restock (coke, sprite, fanta) - Fully stock inventory");
             Console.WriteLine("-------");
             Console.WriteLine("Inserted money: " + money);
             Console.WriteLine("-------\n\n");

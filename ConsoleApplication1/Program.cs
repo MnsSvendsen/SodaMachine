@@ -12,7 +12,7 @@ namespace ConsoleApplication1
        
         private static void Main(string[] args)
         {
-            SodaMachine sodaMachine = new SodaMachine();
+            SodaMachineController sodaMachine = new SodaMachineController();
             sodaMachine.Start();
         }
     }   

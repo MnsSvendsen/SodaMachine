@@ -7,7 +7,7 @@ namespace ConsoleApplication1Tests
     [TestClass]
     public class UnitTest1
     {
-        SodaMachine sodaMachine = new SodaMachine();
+        SodaMachineController sodaMachine = new SodaMachineController();
         [TestMethod]
         public void TestAddCredit()
         { 
