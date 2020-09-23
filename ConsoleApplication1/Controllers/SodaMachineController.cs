@@ -10,6 +10,7 @@ namespace ConsoleApplication1.Controllers
     public class SodaMachineController
     {
         private readonly MockSodaApi _repo = new MockSodaApi();
+        readonly SodaController sodaController = new SodaController();
         private static int money;
         public SodaMachineController() { }
         /// <summary>
@@ -22,6 +23,7 @@ namespace ConsoleApplication1.Controllers
             {
 
                 DisplayText();
+
 
                 var input = Console.ReadLine();
                 try
@@ -36,13 +38,14 @@ namespace ConsoleApplication1.Controllers
                     if (input.StartsWith("order"))
                     {
                         var csoda = input.Split(' ')[1];
-                        OrderSoda(csoda, inventory);
+                        sodaController.OrderSoda(csoda, inventory, money);
+                        ResetMonny();
                     }
 
                     if (input.StartsWith("sms order"))
                     {
                         var csoda = input.Split(' ')[2];
-                        OrderSodaSms(csoda, inventory);
+                        sodaController.OrderSodaSms(csoda, inventory);
                     }
                     if (input.Equals("recall"))
                     {
@@ -50,12 +53,12 @@ namespace ConsoleApplication1.Controllers
                     }
                     if (input.Equals("inventory"))
                     {
-                        PrintInventory(inventory);
+                        sodaController.PrintInventory(inventory);
                     }
                     if (input.StartsWith("restock"))
                     {
                         var csoda = input.Split(' ')[1];
-                        StockInventory(csoda, inventory);
+                        sodaController.StockInventory(csoda, inventory);
                     }
                 }
                 catch
@@ -72,83 +75,18 @@ namespace ConsoleApplication1.Controllers
 
         }
 
-        public void OrderSoda(string name, Soda[] inventory)
-        {
-            try
-            {
-                var sodatype = inventory.First(Soda => Soda.Name == name);
-                if (sodatype.Nr > 0 && sodatype.Price <= money)
-                {
-                    Console.WriteLine("Giving " + sodatype.Name + " out");
-                    money -= sodatype.Price;
-                    Console.WriteLine("Giving " + money + " out in change");
-                    money = 0;
-                    sodatype.Nr--;
-                }
-                else if (sodatype.Nr == 0)
-                {
-                    Console.WriteLine("No " + sodatype.Name + " left");
-                }
-                else if (sodatype.Price > money)
-                {
-                    Console.WriteLine("Need " + (sodatype.Price - money) + " more");
-                }
-            }
-            catch
-            {
-                Console.WriteLine(" No such soda ");
-            }
-        }
-
-        public void OrderSodaSms(string name, Soda[] inventory)
-        {
-            try
-            {
-                var sodatype = inventory.First(Soda => Soda.Name == name);
-                if (sodatype.Nr > 0)
-                {
-                    Console.WriteLine("Giving " + sodatype.Name + " out");
-                    sodatype.Nr--;
-                }
-                else if (sodatype.Nr == 0)
-                {
-                    Console.WriteLine("No " + sodatype.Name + " left");
-                }
-            }
-            catch
-            {
-                Console.WriteLine(" No such soda ");
-            }
-        }
-
-        public void PrintInventory(Soda[] inventory)
-        {
-            foreach (Soda soda in inventory)
-            {
-                Console.WriteLine("Name:" + soda.Name + "  Stock:" + soda.Nr + "  Price:" + soda.Price);
-            }
-        }
-
-        public void StockInventory(string name, Soda[] inventory)
-        {
-            var sodatype = inventory.First(Soda => Soda.Name == name);
-            if (sodatype.Nr < 6)
-            {
-                Console.WriteLine("Filling " + sodatype.Name + " inn to the machine");
-                sodatype.Nr = 6;
-            }
-            else if (sodatype.Nr >= 6)
-            {
-                Console.WriteLine("No rom left to stock soda");
-            }
-        }
-
         public int RecallMonney(int moneyToReturn)
         {
             Console.WriteLine("Returning " + moneyToReturn + " to customer");
             money = 0;
             return money;
         }
+
+        public void ResetMonny()
+        {
+            money = 0;
+        }
+
 
         public void DisplayText()
         {
