@@ -93,5 +93,21 @@ namespace ConsoleApplication1Tests
 
             Assert.IsNotNull(inventory);
         }
+
+        [TestMethod]
+        public void SetPriceTest()
+        {
+
+            var inventory = new[] {
+            new Soda { Name = "coke", Nr = 5, Price = 20 },
+            new Soda { Name = "sprite", Nr = 3, Price = 15 },
+             };
+            var name = "sprite";
+            var oldePrice = 15;
+            var updatedPrice = 17;
+            sodaController.SetPrice(name, inventory, updatedPrice);
+
+            Assert.AreNotEqual(inventory[1].Price, oldePrice);
+        }
     }
 }
