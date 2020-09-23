@@ -60,6 +60,21 @@ namespace ConsoleApplication1.Controllers
                         var csoda = input.Split(' ')[1];
                         sodaController.StockInventory(csoda, inventory);
                     }
+                    if (input.StartsWith("price"))
+                    {
+
+                        var csoda = input.Split(' ')[1];
+                        try
+                        {
+                            var price = int.Parse(input.Split(' ')[2]);
+                            sodaController.SetPrice(csoda, inventory, price);
+                        }
+                        catch
+                        {
+                            Console.WriteLine(" The price need to be a number ");
+                        }
+
+                    }
                 }
                 catch
                 {
@@ -97,6 +112,7 @@ namespace ConsoleApplication1.Controllers
             Console.WriteLine("recall - gives money back");
             Console.WriteLine("inventory - Gets inventory in the machin");
             Console.WriteLine("restock (coke, sprite, fanta) - Fully stock inventory");
+            Console.WriteLine("price (coke, sprite, fanta) Price - Fully stock inventory");
             Console.WriteLine("-------");
             Console.WriteLine("Inserted money: " + money);
             Console.WriteLine("-------\n\n");

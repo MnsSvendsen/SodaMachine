@@ -76,5 +76,17 @@ namespace ConsoleApplication1.Controllers
                 Console.WriteLine("No rom left to stock soda");
             }
         }
+        public void SetPrice(string name, Soda[] inventory, int updatedPrice)
+        {
+            try
+            {
+                var sodatype = inventory.First(Soda => Soda.Name == name);
+                sodatype.Price = updatedPrice;
+            }
+            catch
+            {
+                Console.WriteLine(" No such soda ");
+            }
+        }
     }
 }
